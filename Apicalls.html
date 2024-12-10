@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="a1"></div>
+    <script type="text/babel">
+        function Countries(){
+            var [allcountries,setAllcountries] = React.useState([]);
+            // function abc(){
+            //     fetch('https://restcountries.com/v3/all')
+            //     .then(function(res){
+            //         res.json().then((data)=>{ 
+            //             setAllcountries([...data]);
+            //             // console.log(data)
+            //             // return data; 
+            //         })
+            //     })}
+            React.useEffect(function(){
+                fetch('https://restcountries.com/v3/all')
+                .then(function(res){
+                    res.json().then((data)=>{ 
+                        setAllcountries([...data]);
+                    })
+                })
+            },[])
+            function sortCountries(key){
+                var temp=[...allcountries]
+                temp.sort(function(A,B){
+                    if(A[key]>B[key]){return 1}
+                    else{ return -1 }
+                }); setAllcountries([...temp])
+            }
+            return(
+                <div>
+                    <h1>Lets get the countries names <button onClick={()=>{abc()}} >Let See</button></h1>  
+                    <table >
+                        <thead>
+                            <tr>
+                                <th onClick={()=>{sortCountries('name')}}>Name</th> 
+                                <th onClick={()=>{sortCountries('capital')}}>Capital</th>
+                                <th onClick={()=>{sortCountries('population')}}>Population</th>
+                                <th onClick={()=>{sortCountries('area')}}>Area</th>
+                                <th >Flags</th>   
+                            </tr>
+                        </thead> 
+                        <tbody>
+                            { allcountries.map((C)=>{ 
+                            return<tr>
+                                    <td>{ C.name.common }</td>
+                                    <td>{ C.capital? C.capital[0]:'none' }</td>
+                                    <td>{ C.population }</td>
+                                    <td>{ C.area }</td>
+                                     
+                                </tr>    
+                                }) }
+                        </tbody>   
+                    </table>        
+                </div>
+            )
+        }
+        ReactDOM.render(<Countries></Countries>,document.getElementById('a1'))
+    </script>
+</body>
+</html>
